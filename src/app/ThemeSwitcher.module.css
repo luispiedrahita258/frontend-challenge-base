@@ -1,0 +1,13 @@
+.themeSwitcher {
+  background-color: var(--button-background-color);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.themeSwitcher:hover {
+  background-color: var(--button-hover-color);
+}
