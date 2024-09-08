@@ -26,10 +26,7 @@ export default NextAuth({
       authorize: async (credentials) => {
         const user = users.find((user) => user.email === credentials?.email);
 
-        if (
-          user &&
-          (await bcrypt.compare(credentials?.password, user.password))
-        ) {
+        if (user && (await bcrypt.compare(credentials?.password, user.password))) {
           return { id: user.id, name: user.name, email: user.email };
         }
 
