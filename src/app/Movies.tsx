@@ -8,7 +8,7 @@ import styles from './Movies.module.css';
 
 export default function Movies() {
   const { data: session } = useSession();
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,6 +21,7 @@ export default function Movies() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Cargar favoritos desde localStorage
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
     if (storedFavorites) {
@@ -28,10 +29,12 @@ export default function Movies() {
     }
   }, []);
 
+  // Guardar favoritos en localStorage
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
+  // Obtener películas desde la API
   const fetchMovies = async (page: number, isLoadMore: boolean = false) => {
     try {
       setIsLoading(true);
@@ -44,8 +47,6 @@ export default function Movies() {
       const response = await axios.get(
         `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&query=${searchQuery}&page=${page}${genreParam}${yearParam}${languageParam}${countryParam}${typeParam}`
       );
-
-      console.log(response);
 
       if (isLoadMore) {
         setMovies((prevMovies) => [...prevMovies, ...response.data.results]);
@@ -63,15 +64,18 @@ export default function Movies() {
     }
   };
 
+  // Actualizar películas cuando se cambian los filtros
   useEffect(() => {
     fetchMovies(currentPage);
   }, [currentPage, searchQuery, genreFilter, yearFilter, languageFilter, countryFilter, typeFilter]);
 
+  // Manejo de búsqueda
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
     setCurrentPage(1);
   };
 
+  // Manejo de cambio de filtros
   const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setGenreFilter(event.target.value);
     setCurrentPage(1);
@@ -97,6 +101,7 @@ export default function Movies() {
     setCurrentPage(1);
   };
 
+  // Cargar más películas
   const loadMoreMovies = () => {
     const currentScrollPosition = window.scrollY;
 
@@ -110,6 +115,7 @@ export default function Movies() {
     }
   };
 
+  // Alternar favoritos
   const toggleFavorite = (movieId: string) => {
     if (favorites.includes(movieId)) {
       setFavorites(favorites.filter((id) => id !== movieId));
