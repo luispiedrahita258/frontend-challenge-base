@@ -6,7 +6,8 @@ import axios from "axios";
 import styles from './page.module.css';
 
 export default function MovieDetails() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id || "";  // Validamos que `id` sea seguro
   const movieId = Array.isArray(id) ? id[0] : id;
   const [movie, setMovie] = useState<any>(null);
   const [credits, setCredits] = useState<any[]>([]); 
@@ -18,17 +19,17 @@ export default function MovieDetails() {
     const fetchMovieDetails = async () => {
       try {
         const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
         );
         setMovie(response.data);
 
         const creditsResponse = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
         );
         setCredits(creditsResponse.data.cast.slice(0, 5));
 
         const trailerResponse = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
         );
         const youtubeTrailer = trailerResponse.data.results.find(
           (video: any) => video.site === "YouTube" && video.type === "Trailer"
@@ -36,7 +37,7 @@ export default function MovieDetails() {
         setTrailer(youtubeTrailer ? `https://www.youtube.com/watch?v=${youtubeTrailer.key}` : null);
 
         const reviewsResponse = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
         );
         setReviews(reviewsResponse.data.results.slice(0, 3));
       } catch (error) {
@@ -46,7 +47,7 @@ export default function MovieDetails() {
     };
 
     fetchMovieDetails();
-  }, [id]);
+  }, [movieId]);
 
   if (error) {
     return <div>{error}</div>;
