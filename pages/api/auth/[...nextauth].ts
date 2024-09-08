@@ -1,5 +1,5 @@
-import nextAuth from 'next-auth';
-import credentialsProvider from 'next-auth/providers/credentials'; 
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 
 const users = [
@@ -11,9 +11,9 @@ const users = [
   },
 ];
 
-export default nextAuth({
+export default NextAuth({
   providers: [
-    credentialsProvider({
+    CredentialsProvider({
       name: 'Credentials',
       credentials: {
         email: {
@@ -26,7 +26,10 @@ export default nextAuth({
       authorize: async (credentials) => {
         const user = users.find((user) => user.email === credentials?.email);
 
-        if (user && await bcrypt.compare(credentials?.password, user.password)) {
+        if (
+          user &&
+          (await bcrypt.compare(credentials?.password, user.password))
+        ) {
           return { id: user.id, name: user.name, email: user.email };
         }
 

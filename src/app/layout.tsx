@@ -7,18 +7,18 @@ import { useState, useEffect } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({
+export default function rootLayout({
   children,
 }: {
   children: React.ReactNode;
-}): JSX.Element {
-  const [theme, setTheme] = useState<string>('light');
+}) {
+  const [theme, setTheme] = useState('light');
 
-  const toggleTheme = (): void => {
+  const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  useEffect((): void => {
+  useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 

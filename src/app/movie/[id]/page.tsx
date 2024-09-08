@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import axios from 'axios';
 import styles from './page.module.css';
 
-export default function MovieDetails(): JSX.Element {
+export default function movieDetails() {
   const params = useParams();
   const id = params?.id || '';
   const movieId = Array.isArray(id) ? id[0] : id;
@@ -16,7 +16,7 @@ export default function MovieDetails(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMovieDetails = async (): Promise<void> => {
+    const fetchMovieDetails = async () => {
       try {
         const response = await axios.get(
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,

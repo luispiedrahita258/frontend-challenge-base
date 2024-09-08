@@ -3,14 +3,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-interface Movie {
-  id: string;
-  title: string;
-  poster_path: string;
-}
-
-export default function Favorites(): JSX.Element {
-  const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
+export default function favoritesPage() {
+  const [favoriteMovies, setFavoriteMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,7 +17,7 @@ export default function Favorites(): JSX.Element {
       console.log('Favorite IDs:', favoriteIds);
 
       if (favoriteIds.length > 0) {
-        const fetchFavoriteMovies = async (): Promise<void> => {
+        const fetchFavoriteMovies = async () => {
           try {
             const movieRequests = favoriteIds.map((id: string) => {
               const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
@@ -53,7 +47,7 @@ export default function Favorites(): JSX.Element {
     }
   }, []);
 
-  const removeFavorite = (movieId: string): void => {
+  const removeFavorite = (movieId: string) => {
     const updatedFavorites = favoriteMovies.filter(
       (movie) => movie.id !== movieId,
     );
