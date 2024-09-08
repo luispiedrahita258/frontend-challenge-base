@@ -7,6 +7,7 @@ import styles from './page.module.css';
 
 export default function MovieDetails() {
   const { id } = useParams();
+  const movieId = Array.isArray(id) ? id[0] : id;
   const [movie, setMovie] = useState<any>(null);
   const [credits, setCredits] = useState<any[]>([]); 
   const [trailer, setTrailer] = useState<string | null>(null);
