@@ -1,4 +1,3 @@
-import { createEnv } from "@inlaze_techlead/env-nextjs";
 import { z } from "zod";
 
 export const env = createEnv({

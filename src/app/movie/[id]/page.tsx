@@ -7,7 +7,7 @@ import styles from './page.module.css';
 
 export default function MovieDetails() {
   const params = useParams();
-  const id = params?.id || "";  // Validamos que `id` sea seguro
+  const id = params?.id || "";
   const movieId = Array.isArray(id) ? id[0] : id;
   const [movie, setMovie] = useState<any>(null);
   const [credits, setCredits] = useState<any[]>([]); 
@@ -41,8 +41,8 @@ export default function MovieDetails() {
         );
         setReviews(reviewsResponse.data.results.slice(0, 3));
       } catch (error) {
-        console.error("Error fetching movie details:", error);
-        setError("Could not load movie details.");
+        console.error("Error al obtener los detalles de la película:", error);
+        setError("No se pudieron cargar los detalles de la película.");
       }
     };
 
@@ -54,7 +54,7 @@ export default function MovieDetails() {
   }
 
   if (!movie) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   return (
@@ -62,8 +62,8 @@ export default function MovieDetails() {
       <h1 className={styles.movieTitle}>{movie.title}</h1>
 
       <div className={styles.movieMeta}>
-        <p>Rating: {movie.vote_average.toFixed(1)}</p>
-        <p>Release Date: {movie.release_date}</p>
+        <p>Calificación: {movie.vote_average.toFixed(1)}</p>
+        <p>Fecha de estreno: {movie.release_date}</p>
       </div>
 
       <img
@@ -76,10 +76,10 @@ export default function MovieDetails() {
 
       {trailer && (
         <div className={styles.movieTrailer}>
-          <h3>Watch the Trailer:</h3>
+          <h3>Ver el Tráiler:</h3>
           <iframe
             src={trailer}
-            title="Movie Trailer"
+            title="Tráiler de la Película"
             frameBorder="0"
             allowFullScreen
           ></iframe>
@@ -87,18 +87,18 @@ export default function MovieDetails() {
       )}
 
       <div className={styles.movieCast}>
-        <h3>Top Cast:</h3>
+        <h3>Reparto Principal:</h3>
         <ul>
           {credits.map((castMember) => (
             <li key={castMember.cast_id}>
-              {castMember.name} as {castMember.character}
+              {castMember.name} como {castMember.character}
             </li>
           ))}
         </ul>
       </div>
 
       <div className={styles.movieReviews}>
-        <h3>User Reviews:</h3>
+        <h3>Reseñas de Usuarios:</h3>
         {reviews.length > 0 ? (
           <ul>
             {reviews.map((review) => (
@@ -109,7 +109,7 @@ export default function MovieDetails() {
             ))}
           </ul>
         ) : (
-          <p>No reviews available for this movie.</p>
+          <p>No hay reseñas disponibles para esta película.</p>
         )}
       </div>
     </div>
