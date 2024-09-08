@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import axios from "axios";
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import axios from 'axios';
 import styles from './page.module.css';
 
 export default function MovieDetails() {
   const params = useParams();
-  const id = params?.id || "";
+  const id = params?.id || '';
   const movieId = Array.isArray(id) ? id[0] : id;
   const [movie, setMovie] = useState<any>(null);
-  const [credits, setCredits] = useState<any[]>([]); 
+  const [credits, setCredits] = useState<any[]>([]);
   const [trailer, setTrailer] = useState<string | null>(null);
   const [reviews, setReviews] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -19,30 +19,34 @@ export default function MovieDetails() {
     const fetchMovieDetails = async () => {
       try {
         const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         );
         setMovie(response.data);
 
         const creditsResponse = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         );
         setCredits(creditsResponse.data.cast.slice(0, 5));
 
         const trailerResponse = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         );
         const youtubeTrailer = trailerResponse.data.results.find(
-          (video: any) => video.site === "YouTube" && video.type === "Trailer"
+          (video: any) => video.site === 'YouTube' && video.type === 'Trailer',
         );
-        setTrailer(youtubeTrailer ? `https://www.youtube.com/watch?v=${youtubeTrailer.key}` : null);
+        setTrailer(
+          youtubeTrailer
+            ? `https://www.youtube.com/watch?v=${youtubeTrailer.key}`
+            : null,
+        );
 
         const reviewsResponse = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
         );
         setReviews(reviewsResponse.data.results.slice(0, 3));
       } catch (error) {
-        console.error("Error al obtener los detalles de la película:", error);
-        setError("No se pudieron cargar los detalles de la película.");
+        console.error('Error al obtener los detalles de la película:', error);
+        setError('No se pudieron cargar los detalles de la película.');
       }
     };
 

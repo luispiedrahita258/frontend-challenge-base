@@ -1,24 +1,27 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
-
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import bcrypt from 'bcryptjs';
 
 const users = [
   {
-    id: "1",
-    name: "user1",
-    email: "user1@example.com",
-    password: bcrypt.hashSync("password123", 10),
+    id: '1',
+    name: 'user1',
+    email: 'user1@example.com',
+    password: bcrypt.hashSync('password123', 10),
   },
 ];
 
 export default NextAuth({
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "email@example.com" },
-        password: { label: "Password", type: "password" },
+        email: {
+          label: 'Email',
+          type: 'text',
+          placeholder: 'email@example.com',
+        },
+        password: { label: 'Password', type: 'password' },
       },
       authorize: async (credentials) => {
         const user = users.find((user) => user.email === credentials?.email);
@@ -32,7 +35,7 @@ export default NextAuth({
     }),
   ],
   pages: {
-    signIn: "/auth/signin",
+    signIn: '/auth/signin',
   },
   secret: process.env.NEXTAUTH_SECRET,
 });

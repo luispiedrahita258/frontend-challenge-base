@@ -1,6 +1,5 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-// Define el esquema de validación para las variables de entorno
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
   APP_URL: z.string().url().min(1),
@@ -17,7 +16,6 @@ const envSchema = z.object({
   NEXT_PUBLIC_TMDB_API_KEY: z.string().min(1),
 });
 
-// Valida las variables de entorno
 export const env = envSchema.parse({
   DATABASE_URL: process.env.DATABASE_URL,
   APP_URL: process.env.APP_URL,
@@ -29,6 +27,7 @@ export const env = envSchema.parse({
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET_KEY: process.env.STRIPE_WEBHOOK_SECRET_KEY,
   STRIPE_SUBSCRIPTION_PRICE_ID: process.env.STRIPE_SUBSCRIPTION_PRICE_ID,
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   NEXT_PUBLIC_TMDB_API_KEY: process.env.NEXT_PUBLIC_TMDB_API_KEY,
 });

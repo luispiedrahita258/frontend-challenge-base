@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import styles from './Movies.module.css';
 
 export default function Movies() {
@@ -11,19 +11,19 @@ export default function Movies() {
   const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [genreFilter, setGenreFilter] = useState("");
-  const [yearFilter, setYearFilter] = useState("");
-  const [languageFilter, setLanguageFilter] = useState("");
-  const [countryFilter, setCountryFilter] = useState("");
-  const [typeFilter, setTypeFilter] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [genreFilter, setGenreFilter] = useState('');
+  const [yearFilter, setYearFilter] = useState('');
+  const [languageFilter, setLanguageFilter] = useState('');
+  const [countryFilter, setCountryFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   // Cargar favoritos desde localStorage
   useEffect(() => {
-    const storedFavorites = localStorage.getItem("favorites");
+    const storedFavorites = localStorage.getItem('favorites');
     if (storedFavorites) {
       setFavorites(JSON.parse(storedFavorites));
     }
@@ -31,21 +31,23 @@ export default function Movies() {
 
   // Guardar favoritos en localStorage
   useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
+    localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
   // Obtener películas desde la API
   const fetchMovies = async (page: number, isLoadMore: boolean = false) => {
     try {
       setIsLoading(true);
-      const genreParam = genreFilter ? `&with_genres=${genreFilter}` : "";
-      const yearParam = yearFilter ? `&primary_release_year=${yearFilter}` : "";
-      const languageParam = languageFilter ? `&with_original_language=${languageFilter}` : "";
-      const countryParam = countryFilter ? `&region=${countryFilter}` : "";
-      const typeParam = typeFilter ? `&with_type=${typeFilter}` : "";
+      const genreParam = genreFilter ? `&with_genres=${genreFilter}` : '';
+      const yearParam = yearFilter ? `&primary_release_year=${yearFilter}` : '';
+      const languageParam = languageFilter
+        ? `&with_original_language=${languageFilter}`
+        : '';
+      const countryParam = countryFilter ? `&region=${countryFilter}` : '';
+      const typeParam = typeFilter ? `&with_type=${typeFilter}` : '';
 
       const response = await axios.get(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&query=${searchQuery}&page=${page}${genreParam}${yearParam}${languageParam}${countryParam}${typeParam}`
+        `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&query=${searchQuery}&page=${page}${genreParam}${yearParam}${languageParam}${countryParam}${typeParam}`,
       );
 
       if (isLoadMore) {
@@ -56,10 +58,12 @@ export default function Movies() {
 
       setTotalPages(response.data.total_pages);
       setIsLoading(false);
-      setError("");
+      setError('');
     } catch (error) {
-      console.error("Error fetching movies:", error);
-      setError("Lo sentimos, no pudimos cargar las películas. Inténtalo de nuevo más tarde.");
+      console.error('Error fetching movies:', error);
+      setError(
+        'Lo sentimos, no pudimos cargar las películas. Inténtalo de nuevo más tarde.',
+      );
       setIsLoading(false);
     }
   };
@@ -67,7 +71,15 @@ export default function Movies() {
   // Actualizar películas cuando se cambian los filtros
   useEffect(() => {
     fetchMovies(currentPage);
-  }, [currentPage, searchQuery, genreFilter, yearFilter, languageFilter, countryFilter, typeFilter]);
+  }, [
+    currentPage,
+    searchQuery,
+    genreFilter,
+    yearFilter,
+    languageFilter,
+    countryFilter,
+    typeFilter,
+  ]);
 
   // Manejo de búsqueda
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +98,9 @@ export default function Movies() {
     setCurrentPage(1);
   };
 
-  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleLanguageChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setLanguageFilter(event.target.value);
     setCurrentPage(1);
   };
@@ -111,7 +125,7 @@ export default function Movies() {
 
       setTimeout(() => {
         window.scrollTo(0, currentScrollPosition);
-      }, 100); 
+      }, 100);
     }
   };
 
@@ -133,10 +147,14 @@ export default function Movies() {
         {session ? (
           <div>
             <p>Bienvenido, {session.user?.name}!</p>
-            <button className={styles.authButton} onClick={() => signIn()}>Iniciar sesión</button>
+            <button className={styles.authButton} onClick={() => signIn()}>
+              Iniciar sesión
+            </button>
           </div>
         ) : (
-          <button className={styles.authButton} onClick={() => signOut()}>Cerrar sesión</button>
+          <button className={styles.authButton} onClick={() => signOut()}>
+            Cerrar sesión
+          </button>
         )}
       </header>
 
@@ -151,7 +169,11 @@ export default function Movies() {
       <div className={styles.filtersContainer}>
         <div className={styles.filterItem}>
           <label>Filtrar por Género:</label>
-          <select className={styles.selectInput} value={genreFilter} onChange={handleGenreChange}>
+          <select
+            className={styles.selectInput}
+            value={genreFilter}
+            onChange={handleGenreChange}
+          >
             <option value="">Todos los Géneros</option>
             <option value="28">Acción</option>
             <option value="35">Comedia</option>
@@ -161,7 +183,11 @@ export default function Movies() {
 
         <div className={styles.filterItem}>
           <label>Filtrar por Año:</label>
-          <select className={styles.selectInput} value={yearFilter} onChange={handleYearChange}>
+          <select
+            className={styles.selectInput}
+            value={yearFilter}
+            onChange={handleYearChange}
+          >
             <option value="">Todos los Años</option>
             <option value="2023">2023</option>
             <option value="2022">2022</option>
@@ -170,7 +196,11 @@ export default function Movies() {
 
         <div className={styles.filterItem}>
           <label>Filtrar por Idioma:</label>
-          <select className={styles.selectInput} value={languageFilter} onChange={handleLanguageChange}>
+          <select
+            className={styles.selectInput}
+            value={languageFilter}
+            onChange={handleLanguageChange}
+          >
             <option value="">Todos los Idiomas</option>
             <option value="en">Inglés</option>
             <option value="es">Español</option>
@@ -180,7 +210,11 @@ export default function Movies() {
 
         <div className={styles.filterItem}>
           <label>Filtrar por País:</label>
-          <select className={styles.selectInput} value={countryFilter} onChange={handleCountryChange}>
+          <select
+            className={styles.selectInput}
+            value={countryFilter}
+            onChange={handleCountryChange}
+          >
             <option value="">Todos los Países</option>
             <option value="US">EE.UU.</option>
             <option value="FR">Francia</option>
@@ -190,7 +224,11 @@ export default function Movies() {
 
         <div className={styles.filterItem}>
           <label>Filtrar por Tipo:</label>
-          <select className={styles.selectInput} value={typeFilter} onChange={handleTypeChange}>
+          <select
+            className={styles.selectInput}
+            value={typeFilter}
+            onChange={handleTypeChange}
+          >
             <option value="">Todos los Tipos</option>
             <option value="movie">Película</option>
             <option value="tv">Serie de TV</option>
@@ -217,7 +255,9 @@ export default function Movies() {
               <h3>{movie.title}</h3>
             </Link>
             <button onClick={() => toggleFavorite(movie.id)}>
-              {favorites.includes(movie.id) ? "Eliminar de Favoritos" : "Añadir a Favoritos"}
+              {favorites.includes(movie.id)
+                ? 'Eliminar de Favoritos'
+                : 'Añadir a Favoritos'}
             </button>
           </div>
         ))}
