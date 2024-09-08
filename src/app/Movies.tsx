@@ -107,6 +107,7 @@ export default function Movies() {
       setTimeout(() => {
         window.scrollTo(0, currentScrollPosition);
       }, 100); 
+    }
   };
 
   const toggleFavorite = (movieId: string) => {
