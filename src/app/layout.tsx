@@ -11,14 +11,14 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
-  const [theme, setTheme] = useState('light');
+}): JSX.Element {
+  const [theme, setTheme] = useState<string>('light');
 
-  const toggleTheme = () => {
+  const toggleTheme = (): void => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  useEffect(() => {
+  useEffect((): void => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 

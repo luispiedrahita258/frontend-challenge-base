@@ -6,22 +6,29 @@ import Link from 'next/link';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import styles from './Movies.module.css';
 
-export default function Movies() {
-  const { data: session } = useSession();
-  const [movies, setMovies] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [genreFilter, setGenreFilter] = useState('');
-  const [yearFilter, setYearFilter] = useState('');
-  const [languageFilter, setLanguageFilter] = useState('');
-  const [countryFilter, setCountryFilter] = useState('');
-  const [typeFilter, setTypeFilter] = useState('');
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+interface Movie {
+  id: string;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+}
 
-  // Cargar favoritos desde localStorage
+export default function Movies(): JSX.Element {
+  const { data: session } = useSession();
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [genreFilter, setGenreFilter] = useState<string>('');
+  const [yearFilter, setYearFilter] = useState<string>('');
+  const [languageFilter, setLanguageFilter] = useState<string>('');
+  const [countryFilter, setCountryFilter] = useState<string>('');
+  const [typeFilter, setTypeFilter] = useState<string>('');
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+
+
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favorites');
     if (storedFavorites) {
@@ -29,13 +36,13 @@ export default function Movies() {
     }
   }, []);
 
-  // Guardar favoritos en localStorage
+
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  // Obtener películas desde la API
-  const fetchMovies = async (page: number, isLoadMore: boolean = false) => {
+
+  const fetchMovies = async (page: number, isLoadMore: boolean = false): Promise<void> => {
     try {
       setIsLoading(true);
       const genreParam = genreFilter ? `&with_genres=${genreFilter}` : '';
@@ -68,7 +75,7 @@ export default function Movies() {
     }
   };
 
-  // Actualizar películas cuando se cambian los filtros
+
   useEffect(() => {
     fetchMovies(currentPage);
   }, [
@@ -81,42 +88,42 @@ export default function Movies() {
     typeFilter,
   ]);
 
-  // Manejo de búsqueda
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchQuery(event.target.value);
     setCurrentPage(1);
   };
 
-  // Manejo de cambio de filtros
-  const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+
+  const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     setGenreFilter(event.target.value);
     setCurrentPage(1);
   };
 
-  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     setYearFilter(event.target.value);
     setCurrentPage(1);
   };
 
   const handleLanguageChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  ): void => {
     setLanguageFilter(event.target.value);
     setCurrentPage(1);
   };
 
-  const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     setCountryFilter(event.target.value);
     setCurrentPage(1);
   };
 
-  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     setTypeFilter(event.target.value);
     setCurrentPage(1);
   };
 
-  // Cargar más películas
-  const loadMoreMovies = () => {
+
+  const loadMoreMovies = (): void => {
     const currentScrollPosition = window.scrollY;
 
     if (currentPage < totalPages) {
@@ -129,8 +136,8 @@ export default function Movies() {
     }
   };
 
-  // Alternar favoritos
-  const toggleFavorite = (movieId: string) => {
+
+  const toggleFavorite = (movieId: string): void => {
     if (favorites.includes(movieId)) {
       setFavorites(favorites.filter((id) => id !== movieId));
     } else {

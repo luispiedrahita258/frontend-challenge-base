@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './ThemeSwitcher.module.css';
 
-export default function ThemeSwitcher() {
-  const [theme, setTheme] = useState('dark');
+export default function ThemeSwitcher(): JSX.Element {
+  const [theme, setTheme] = useState<string>('dark');
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -10,7 +10,7 @@ export default function ThemeSwitcher() {
     document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme = (): void => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);

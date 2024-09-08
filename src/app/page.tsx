@@ -1,6 +1,6 @@
-import Movies from './Movies'; // Importa el componente Movies
+import Movies from './Movies';
 
-export default function Home() {
+export default function Home(): JSX.Element {
   return (
     <div>
       {/* <h1>Popular Movies</h1> */}
